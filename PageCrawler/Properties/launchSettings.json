@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PageCrawler": {
+      "commandName": "Project",
+      "commandLineArgs": "https://www.google.com.au/"
+    }
+  }
+}
