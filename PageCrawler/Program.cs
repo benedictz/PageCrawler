@@ -15,8 +15,8 @@ namespace PageCrawler
             }
 
             //Global Objects
-            //string url = "https://www.scorptec.com.au/product/graphics-cards/geforcertx3080";
-            int sleepSeconds = 30;
+            int sleepSeconds = 3;
+            bool loop = true;
 
             //Randomise browser and OS
             Random rand = new Random();
@@ -33,15 +33,15 @@ namespace PageCrawler
 
             string user = user_agents[rand.Next(user_agents.Length)];
 
-            //Load page
+            //Initial Setup
             WebClient client = new WebClient();
             Console.WriteLine($"Searching '{args[0]}' with {user}");
             client.Headers.Add("User-Agent", user);
 
+            //Load Page
             Stream data = client.OpenRead(args[0]);
             StreamReader reader = new StreamReader(data);
             string HTML = reader.ReadToEnd();
-            //Console.WriteLine(HTML);
             Console.WriteLine("Initial check complete");
 
             /*
@@ -51,7 +51,7 @@ namespace PageCrawler
             */
 
             //Loop infinitely with new checks
-            while (true)
+            while (loop)
             {
                 //Sleep
                 Thread.Sleep(sleepSeconds * 1000);
@@ -64,6 +64,7 @@ namespace PageCrawler
                 StreamReader newReader = new StreamReader(newData);
                 string newHTML = newReader.ReadToEnd();
 
+
                 //Compare HTML
                 if (HTML.Equals(newHTML))
                 {
@@ -72,7 +73,12 @@ namespace PageCrawler
                 else
                 {
                     Console.WriteLine("Changed");
+                    HTML = newHTML;
+                    loop = false;
                 }
+
+                //  Given the state of modern web design, comparing HTML strings in this fashion will always show changes.
+                //  This is not ideal, I need to find a way to compare specific elements that I'm looking for.
 
                 newData.Close();
                 newReader.Close();
