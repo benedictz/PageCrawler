@@ -9,6 +9,7 @@ namespace PageCrawler
     {
         static void Main(string[] args)
         {
+			//	Make sure an input is detected
             if (args == null || args.Length == 0)
             {
                 throw new ApplicationException("Specify the URI to retrieve");
